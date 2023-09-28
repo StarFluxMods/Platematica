@@ -18,6 +18,13 @@ namespace KitchenMyMod.Systems
 {
     public class HologramProjectorView : UpdatableObjectView<HologramProjectorView.ViewData>
     {
+
+        public Dictionary<int, int> ApplianceRotationOverrides = new Dictionary<int, int>
+        {
+            {ApplianceReferences.Portioner, 180},
+            {ApplianceReferences.MixerPusher, 180},
+        };
+        
         [MessagePackObject(false)]
         public struct ViewData : ISpecificViewData, IViewData.ICheckForChanges<ViewData>
         {
@@ -99,18 +106,28 @@ namespace KitchenMyMod.Systems
                         Animator animator = prefab.GetComponent<Animator>();
                         animator.SetInteger("Direction", component.rotatedGrabberDirection);
                     }
-
+                    
+                    // Directional Arrows
+                    
                     if (RenderUtils.SetMaterialsTransparent(prefab))
                     {
                         RenderUtils.RemoveColliders(prefab);
                         RenderUtils.RemoveNavMeshObstacles(prefab);
                         if (component.isDirectional && displayArrows)
                         {
-                            GameObject arrow_overlay = Instantiate(Mod.Bundle.LoadAsset<GameObject>("Arrow Overlay"));
+                            Quaternion rotation = Quaternion.Euler(0, component.rotationOffset, 0);
+                            string overlayName = "Arrow Overlay";
+                            if (ApplianceRotationOverrides.ContainsKey(component.applianceID))
+                                rotation = Quaternion.Euler(0, component.rotationOffset + ApplianceRotationOverrides[component.applianceID], 0);
+                            if (component.rotatedGrabberDirection == 1)
+                                overlayName = "Arrow Overlay - Left";
+                            else  if (component.rotatedGrabberDirection == 4)
+                                overlayName = "Arrow Overlay - Right";
+                            GameObject arrow_overlay = Instantiate(Mod.Bundle.LoadAsset<GameObject>(overlayName));
                             arrow_overlay.transform.parent = HoldPoint.transform;
                             arrow_overlay.transform.localPosition = new Vector3(xOffset, 0.0f, zOffset);
                             arrow_overlay.transform.localScale = Vector3.one;
-                            arrow_overlay.transform.localRotation = Quaternion.Euler(0, component.rotationOffset, 0);
+                            arrow_overlay.transform.localRotation = rotation;
                             MaterialUtils.AssignMaterialsByNames(arrow_overlay);
                             CurrentGhosts.Add(arrow_overlay);
                         }

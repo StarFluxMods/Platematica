@@ -85,7 +85,7 @@ namespace KitchenMyMod.Systems
                     StopHologramBuilder();
                     SchematicLocation = (FirstCorner, SecondCorner);
                     
-                    TextInputView.RequestTextInput("Name you schematic", "", 20, BuildSchematic);
+                    TextInputView.RequestTextInput("Name your schematic", "", 20, BuildSchematic);
                 }
             }
         }
@@ -165,6 +165,7 @@ namespace KitchenMyMod.Systems
                 Directory.CreateDirectory(storagePath);
 
             File.WriteAllText(Path.Combine(storagePath, name + ".platematica"), json);
+            /*
             if (!SteamUtils.IsSteamInBigPictureMode)
             {
                 SaveFileDialog saveFileDialog1 = new SaveFileDialog();
@@ -177,6 +178,7 @@ namespace KitchenMyMod.Systems
                     File.Copy(Path.Combine(storagePath, name + ".platematica"), saveFileDialog1.FileName);
                 }
             }
+            */
         }
 
         private List<Vector2> GetPoints(Vector2 corner1, Vector2 corner2)

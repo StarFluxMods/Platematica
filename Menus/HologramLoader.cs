@@ -104,6 +104,7 @@ namespace KitchenMyMod.Menus
                 
             }
 
+            /*
             if (!SteamUtils.IsSteamInBigPictureMode)
             {
                 AddLabel("Import New Schematic");
@@ -131,6 +132,7 @@ namespace KitchenMyMod.Menus
                 AddInfo("Importing is not supported on Steam Deck");
                 AddInfo("We are working on a solution");
             }
+            */
 
             New<SpacerElement>(true);
             New<SpacerElement>(true);
