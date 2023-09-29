@@ -1,11 +1,12 @@
 using Kitchen;
+using KitchenMods;
 using Unity.Entities;
 
 namespace Platematica.Systems
 {
     [UpdateBefore(typeof(MakePing))]
     [UpdateBefore(typeof(ShowPingedApplianceInfo))]
-    public class RemovePingedHologram : InteractionSystem
+    public class RemovePingedHologram : InteractionSystem, IModSystem
     {
         protected override InteractionType RequiredType
         {

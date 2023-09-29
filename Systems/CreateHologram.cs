@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using Kitchen;
 using KitchenLib.References;
+using KitchenMods;
 using Newtonsoft.Json;
 using Unity.Entities;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Platematica.Systems
 {
     [UpdateBefore(typeof(MakePing))]
     [UpdateBefore(typeof(ShowPingedApplianceInfo))]
-    public class CreateHologram : InteractionSystem
+    public class CreateHologram : InteractionSystem, IModSystem
     {
 
         private List<int> DirectionalIDs = new List<int>
