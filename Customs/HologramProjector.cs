@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using KitchenData;
 using KitchenLib.Customs;
 using KitchenLib.Utils;
-using KitchenMyMod.Components;
-using KitchenMyMod.Systems;
+using Platematica.Components;
+using Platematica.Systems;
 using UnityEngine;
 
-namespace KitchenMyMod.Customs
+namespace Platematica.Customs
 {
     public class HologramProjector : CustomAppliance
     {

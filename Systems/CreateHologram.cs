@@ -1,16 +1,13 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
 using Kitchen;
 using KitchenLib.References;
 using Newtonsoft.Json;
-using Steamworks;
 using Unity.Entities;
 using UnityEngine;
 using Application = UnityEngine.Application;
 
-namespace KitchenMyMod.Systems
+namespace Platematica.Systems
 {
     [UpdateBefore(typeof(MakePing))]
     [UpdateBefore(typeof(ShowPingedApplianceInfo))]
@@ -165,20 +162,26 @@ namespace KitchenMyMod.Systems
                 Directory.CreateDirectory(storagePath);
 
             File.WriteAllText(Path.Combine(storagePath, name + ".platematica"), json);
-            /*
-            if (!SteamUtils.IsSteamInBigPictureMode)
+            if (Mod.FileExplorerInstalled)
             {
-                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-                saveFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                saveFileDialog1.Filter = ".platematica files (*.platematica)|*.platematica";
-                saveFileDialog1.Title = "Save Your Schematic";
-                saveFileDialog1.ShowDialog();
-                if(saveFileDialog1.FileName != "")
+                FileExplorer.FileExplorer.OpenFileSave((path, file) =>
                 {
-                    File.Copy(Path.Combine(storagePath, name + ".platematica"), saveFileDialog1.FileName);
-                }
+                    string newfile = file;
+                    if (string.IsNullOrEmpty(newfile))
+                    {
+                        newfile = name;
+                    }
+                    if (!newfile.EndsWith(".platematica"))
+                    {
+                        newfile += ".platematica";
+                    }
+
+                    File.Copy(Path.Combine(storagePath, name + ".platematica"), Path.Combine(path, newfile));
+                }, () =>
+                {
+                    Mod.LogInfo("FILE SELECTION CANCELLED");
+                });
             }
-            */
         }
 
         private List<Vector2> GetPoints(Vector2 corner1, Vector2 corner2)

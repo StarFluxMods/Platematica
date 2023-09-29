@@ -4,7 +4,7 @@ using KitchenLib.Customs;
 using KitchenLib.Utils;
 using UnityEngine;
 
-namespace KitchenMyMod.Customs
+namespace Platematica.Customs
 {
     public class Placeholder : CustomAppliance
     {

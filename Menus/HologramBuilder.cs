@@ -3,9 +3,9 @@ using UnityEngine;
 using Kitchen.Modules;
 using KitchenLib;
 using KitchenLib.Utils;
-using KitchenMyMod.Systems;
+using Platematica.Systems;
 
-namespace KitchenMyMod.Menus
+namespace Platematica.Menus
 {
     public class HologramBuilder : KLMenu<PauseMenuAction>
     {

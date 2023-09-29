@@ -3,9 +3,8 @@ using KitchenMods;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace KitchenMyMod.Systems
+namespace Platematica.Systems
 {
     public class getplayer : GameSystemBase, IModSystem
     {

@@ -1,20 +1,17 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
 using Kitchen;
 using UnityEngine;
 using Kitchen.Modules;
 using KitchenLib;
-using KitchenMyMod.Components;
-using KitchenMyMod.Systems;
+using Platematica.Components;
+using Platematica.Systems;
 using Newtonsoft.Json;
-using Steamworks;
 using Application = UnityEngine.Application;
 
-namespace KitchenMyMod.Menus
+namespace Platematica.Menus
 {
-    public class HologramLoader<T> : KLMenu<T>
+    public class HologramLoader : KLMenu<PauseMenuAction>
     {
         public HologramLoader(Transform container, ModuleList module_list) : base(container, module_list)
         {
@@ -81,15 +78,15 @@ namespace KitchenMyMod.Menus
         public void Redraw(int player_id)
         {
             ModuleList.Clear();
-            
+
             if (fileNames.Count > 0)
             {
                 AddLabel("Load Schematic");
                 AddSelect(schematicOptions);
-                
+
                 New<SpacerElement>(true);
-                
-                AddButton("Load Schematic", delegate (int i)
+
+                AddButton("Load Schematic", delegate(int i)
                 {
                     HologramSpawner.Schematics.Add(new CHologramSpawner
                     {
@@ -99,40 +96,29 @@ namespace KitchenMyMod.Menus
                         playerID = player_id
                     });
                 }, 0, 1f, 0.2f);
-                
+
                 New<SpacerElement>(true);
-                
+
             }
 
-            /*
-            if (!SteamUtils.IsSteamInBigPictureMode)
+            if (Mod.FileExplorerInstalled)
             {
                 AddLabel("Import New Schematic");
-                AddButton("Import New", delegate (int i)
+                AddButton("Import New", delegate(int i)
                 {
-                    using (OpenFileDialog openFileDialog = new OpenFileDialog())
+                    RequestAction(PauseMenuAction.CloseMenu);
+                    FileExplorer.FileExplorer.OpenFileSelect((path, file) =>
                     {
-                        openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                        openFileDialog.Filter = "platematica files (*.platematica)|*.platematica";
-                        openFileDialog.Title = "Load Your Schematic";
-                        openFileDialog.RestoreDirectory = true;
-
-                        if (openFileDialog.ShowDialog() == DialogResult.OK)
-                        {
-                            File.Copy(openFileDialog.FileName, Path.Combine(storagePath, Path.GetFileName(openFileDialog.FileName)));
-                            LoadFiles(true, player_id);
-                            RequestSubMenu(typeof(HologramLoader<T>), true);
-                        }
-                    }
+                        File.Copy(file, Path.Combine(storagePath, Path.GetFileName(file)));
+                        LoadFiles(true, player_id);
+                        RequestSubMenu(typeof(HologramLoader), true);
+                    }, OnCancel, "*.platematica");
                 }, 0, 1f, 0.2f);
             }
             else
             {
-                AddLabel("Import New Schematic");
-                AddInfo("Importing is not supported on Steam Deck");
-                AddInfo("We are working on a solution");
+                AddLabel("Please install FileExplorer to import new schematics.");
             }
-            */
 
             New<SpacerElement>(true);
             New<SpacerElement>(true);
@@ -142,6 +128,10 @@ namespace KitchenMyMod.Menus
                 Mod.manager.Save();
                 RequestPreviousMenu();
             }, 0, 1f, 0.2f);
+        }
+        
+        private void OnCancel()
+        {
         }
     }
 }

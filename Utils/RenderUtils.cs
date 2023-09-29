@@ -4,7 +4,7 @@ using KitchenLib.Utils;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace KitchenMyMod.Utils
+namespace Platematica.Utils
 {
     public static class RenderUtils
     {

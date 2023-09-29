@@ -3,7 +3,7 @@ using UnityEngine;
 using Kitchen.Modules;
 using KitchenLib;
 
-namespace KitchenMyMod.Menus
+namespace Platematica.Menus
 {
     public class HologramMenu<T> : KLMenu<T>
     {
@@ -22,7 +22,7 @@ namespace KitchenMyMod.Menus
             {
                 AddButton("Hologram Generator", async delegate (int i)
                 {
-                    RequestSubMenu(typeof(HologramLoader<T>));
+                    RequestSubMenu(typeof(HologramLoader));
                 }, 0, 1f, 0.2f);
                 AddButton("Hologram Builder", async delegate (int i)
                 {

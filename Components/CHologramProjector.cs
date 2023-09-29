@@ -2,7 +2,7 @@ using KitchenData;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace KitchenMyMod.Components
+namespace Platematica.Components
 {
     public struct CHologramProjector : IApplianceProperty, IAttachableProperty, IComponentData
     {

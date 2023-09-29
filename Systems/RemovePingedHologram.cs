@@ -1,7 +1,7 @@
 using Kitchen;
 using Unity.Entities;
 
-namespace KitchenMyMod.Systems
+namespace Platematica.Systems
 {
     [UpdateBefore(typeof(MakePing))]
     [UpdateBefore(typeof(ShowPingedApplianceInfo))]

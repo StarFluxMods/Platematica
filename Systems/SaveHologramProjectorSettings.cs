@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using Kitchen;
 using KitchenMods;
-using KitchenMyMod.Components;
+using Platematica.Components;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace KitchenMyMod.Systems
+namespace Platematica.Systems
 {
     public class SaveHologramProjectorSettings : GameSystemBase, IModSystem
     {

@@ -6,15 +6,15 @@ using KitchenLib.Preferences;
 using KitchenLib.References;
 using KitchenLib.Utils;
 using KitchenMods;
-using KitchenMyMod.Components;
-using KitchenMyMod.Utils;
+using Platematica.Components;
+using Platematica.Utils;
 using MessagePack;
 using Newtonsoft.Json;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
-namespace KitchenMyMod.Systems
+namespace Platematica.Systems
 {
     public class HologramProjectorView : UpdatableObjectView<HologramProjectorView.ViewData>
     {

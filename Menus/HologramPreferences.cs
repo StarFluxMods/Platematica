@@ -4,9 +4,9 @@ using UnityEngine;
 using Kitchen.Modules;
 using KitchenLib;
 using KitchenLib.Preferences;
-using KitchenMyMod.Systems;
+using Platematica.Systems;
 
-namespace KitchenMyMod.Menus
+namespace Platematica.Menus
 {
     public class HologramPreferences<T> : KLMenu<T>
     {

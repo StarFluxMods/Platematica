@@ -1,9 +1,9 @@
 using Controllers;
 using Kitchen;
 using KitchenMods;
-using KitchenMyMod.Components;
+using Platematica.Components;
 
-namespace KitchenMyMod.Systems
+namespace Platematica.Systems
 {
     public class HologramProjectorToggle : ItemInteractionSystem, IModSystem
     {
