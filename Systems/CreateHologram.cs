@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using System.IO;
 using Kitchen;
+using KitchenLib.Preferences;
 using KitchenLib.References;
 using KitchenMods;
 using Newtonsoft.Json;
+using Platematica.Enums;
+using Platematica.Menus.IMGUI;
 using Unity.Entities;
 using UnityEngine;
 using Application = UnityEngine.Application;
@@ -163,26 +166,37 @@ namespace Platematica.Systems
                 Directory.CreateDirectory(storagePath);
 
             File.WriteAllText(Path.Combine(storagePath, name + ".platematica"), json);
-            if (Mod.FileExplorerInstalled)
+
+            if (Mod.manager.GetPreference<PreferenceInt>("importExportSettings").Value == (int)ImportExportSettings.JSONText || !Mod.FileExplorerInstalled)
+            {
+                GameObject gameObject = new GameObject();
+                gameObject.AddComponent<ExportMenu>().Setup(json);
+            }else if (Mod.FileExplorerInstalled)
             {
                 FileExplorer.FileExplorer.OpenFileSave((path, file) =>
                 {
-                    string newfile = file;
-                    if (string.IsNullOrEmpty(newfile))
-                    {
-                        newfile = name;
-                    }
-                    if (!newfile.EndsWith(".platematica"))
-                    {
-                        newfile += ".platematica";
-                    }
-
-                    File.Copy(Path.Combine(storagePath, name + ".platematica"), Path.Combine(path, newfile));
-                }, () =>
-                {
-                    Mod.LogInfo("FILE SELECTION CANCELLED");
-                });
+                    OnSave(path, file, name, storagePath);
+                }, OnCancel);
             }
+        }
+
+        private void OnSave(string path, string file, string name, string storagePath)
+        {
+            string newfile = file;
+            if (string.IsNullOrEmpty(newfile))
+            {
+                newfile = name;
+            }
+            if (!newfile.EndsWith(".platematica"))
+            {
+                newfile += ".platematica";
+            }
+
+            File.Copy(Path.Combine(storagePath, name + ".platematica"), Path.Combine(path, newfile));
+        }
+
+        private void OnCancel()
+        {
         }
 
         private List<Vector2> GetPoints(Vector2 corner1, Vector2 corner2)

@@ -4,9 +4,12 @@ using Kitchen;
 using UnityEngine;
 using Kitchen.Modules;
 using KitchenLib;
+using KitchenLib.Preferences;
 using Platematica.Components;
 using Platematica.Systems;
 using Newtonsoft.Json;
+using Platematica.Enums;
+using Platematica.Menus.IMGUI;
 using Application = UnityEngine.Application;
 
 namespace Platematica.Menus
@@ -100,10 +103,23 @@ namespace Platematica.Menus
                 New<SpacerElement>(true);
 
             }
+            
+            AddLabel("Import New Schematic");
 
-            if (Mod.FileExplorerInstalled)
+            if (Mod.manager.GetPreference<PreferenceInt>("importExportSettings").Value == (int)ImportExportSettings.JSONText || !Mod.FileExplorerInstalled)
             {
-                AddLabel("Import New Schematic");
+                AddButton("Import New", delegate(int i)
+                {
+                    RequestAction(PauseMenuAction.CloseMenu);
+                    GameObject gameObject = new GameObject();
+                    gameObject.AddComponent<ImportMenu>().Setup((json) =>
+                    {
+                        Schematic schematic = JsonConvert.DeserializeObject<Schematic>(json);
+                        File.WriteAllText(Path.Combine(storagePath, schematic.name + ".platematica"), json);
+                    });
+                }, 0, 1f, 0.2f);
+            } else if (Mod.FileExplorerInstalled)
+            {
                 AddButton("Import New", delegate(int i)
                 {
                     RequestAction(PauseMenuAction.CloseMenu);
@@ -111,13 +127,8 @@ namespace Platematica.Menus
                     {
                         File.Copy(file, Path.Combine(storagePath, Path.GetFileName(file)));
                         LoadFiles(true, player_id);
-                        RequestSubMenu(typeof(HologramLoader), true);
                     }, OnCancel, "*.platematica");
                 }, 0, 1f, 0.2f);
-            }
-            else
-            {
-                AddLabel("Please install FileExplorer to import new schematics.");
             }
 
             New<SpacerElement>(true);
@@ -129,7 +140,7 @@ namespace Platematica.Menus
                 RequestPreviousMenu();
             }, 0, 1f, 0.2f);
         }
-        
+
         private void OnCancel()
         {
         }

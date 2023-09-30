@@ -15,6 +15,7 @@ namespace Platematica.Menus
         }
         
         private Option<bool> directionalAssistance = new Option<bool>(new List<bool> { true, false }, Mod.manager.GetPreference<PreferenceBool>("directionalAssistance").Value, new List<string> { "Enabled", "Disabled" });
+        private Option<int> importExportSettings = new Option<int>(new List<int> { 1, 2 }, Mod.manager.GetPreference<PreferenceInt>("importExportSettings").Value, new List<string> { "File Explorer", "JSON" });
         private Option<float> ghostOpacity = new Option<float>(new List<float> { 0.0f, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f }, Mod.manager.GetPreference<PreferenceFloat>("ghostOpacity").Value, new List<string> { "0.0", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0" });
         private Option<float> redTint = new Option<float>(new List<float> { 0.0f, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f }, Mod.manager.GetPreference<PreferenceFloat>("redTint").Value, new List<string> { "0.0", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0" });
         private Option<float> greenTint = new Option<float>(new List<float> { 0.0f, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f }, Mod.manager.GetPreference<PreferenceFloat>("greenTint").Value, new List<string> { "0.0", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0" });
@@ -28,6 +29,15 @@ namespace Platematica.Menus
             {
                 HologramProjectorView.UpdateGhosts = true;
                 Mod.manager.GetPreference<PreferenceBool>("directionalAssistance").Set(result);
+            };
+            
+            New<SpacerElement>(true);
+            
+            AddLabel("Import/Export Mode");
+            AddSelect(importExportSettings);
+            importExportSettings.OnChanged += delegate (object _, int result)
+            {
+                Mod.manager.GetPreference<PreferenceInt>("importExportSettings").Set(result);
             };
             
             New<SpacerElement>(true);

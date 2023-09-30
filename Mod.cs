@@ -10,6 +10,7 @@ using KitchenLib.Preferences;
 using Platematica.Customs;
 using Platematica.Menus;
 using MessagePack;
+using Platematica.Enums;
 using UnityEngine;
 
 namespace Platematica
@@ -18,7 +19,7 @@ namespace Platematica
     {
         public const string MOD_GUID = "com.starfluxgames.platematica";
         public const string MOD_NAME = "Platematica (Beta)";
-        public const string MOD_VERSION = "0.1.3";
+        public const string MOD_VERSION = "0.1.4";
         public const string MOD_AUTHOR = "StarFluxGames";
         public const string MOD_GAMEVERSION = ">=1.1.7";
 
@@ -48,7 +49,6 @@ namespace Platematica
             {
                 if (assembly.ToString().Contains("FileExplorer-Workshop"))
                 {
-                    LogInfo("------------------------------------------ FOUND FILE EXPLORER ------------------------------------------");
                     FileExplorerInstalled = true;
                 }
             }
@@ -75,6 +75,9 @@ namespace Platematica
             manager.RegisterPreference(new PreferenceFloat("redTint", 0.0f));
             manager.RegisterPreference(new PreferenceFloat("greenTint", 0.1f));
             manager.RegisterPreference(new PreferenceFloat("blueTint", 0.0f));
+            manager.RegisterPreference(new PreferenceInt("importExportSettings", (int)ImportExportSettings.FileExplorer));
+            
+            manager.Load();
             
             ModsPreferencesMenu<PauseMenuAction>.RegisterMenu("Platematica", typeof(HologramMenu<PauseMenuAction>), typeof(PauseMenuAction));
 
