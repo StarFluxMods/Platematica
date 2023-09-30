@@ -11,6 +11,7 @@ using Platematica.Customs;
 using Platematica.Menus;
 using MessagePack;
 using Platematica.Enums;
+using Platematica.Menus.IMGUI;
 using UnityEngine;
 
 namespace Platematica
@@ -19,7 +20,7 @@ namespace Platematica
     {
         public const string MOD_GUID = "com.starfluxgames.platematica";
         public const string MOD_NAME = "Platematica (Beta)";
-        public const string MOD_VERSION = "0.1.4";
+        public const string MOD_VERSION = "0.1.5";
         public const string MOD_AUTHOR = "StarFluxGames";
         public const string MOD_GAMEVERSION = ">=1.1.7";
 
@@ -38,6 +39,8 @@ namespace Platematica
         public static AssetBundle Bundle;
 
         public Mod() : base(MOD_GUID, MOD_NAME, MOD_AUTHOR, MOD_VERSION, MOD_GAMEVERSION, Assembly.GetExecutingAssembly()) { }
+
+        private string decoded = "https://plateupplanner.github.io/workspace#G4JgBAbAHhYF4HMCuiXILYEcBOALADtgMYBSSArACZIDqApkgMwBqlB2qpF1LlXcALTRIuAOQDiSLMTJZKnMiwA2XVWTXCAqgHZKmAEJ7DBykqRIwAWms3bdu0A";
         
         protected override void OnInitialise()
         {
@@ -68,6 +71,8 @@ namespace Platematica
         {
             Bundle = mod.GetPacks<AssetBundleModPack>().SelectMany(e => e.AssetBundles).First();
             AddGameData();
+            
+            RegisterMenu<PlannerConverter>();
 
             manager = new PreferenceManager(MOD_GUID);
             manager.RegisterPreference(new PreferenceBool("directionalAssistance", false));

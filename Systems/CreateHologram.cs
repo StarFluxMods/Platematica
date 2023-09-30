@@ -18,7 +18,7 @@ namespace Platematica.Systems
     public class CreateHologram : InteractionSystem, IModSystem
     {
 
-        private List<int> DirectionalIDs = new List<int>
+        public static List<int> DirectionalIDs = new List<int>
         {
             ApplianceReferences.GasLimiter,
             ApplianceReferences.GasSafetyOverride,
