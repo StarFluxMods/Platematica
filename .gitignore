@@ -399,5 +399,3 @@ FodyWeavers.xsd
 
 # Workshop folder compiled dll
 /WorkshopFolder/content/**/*.dll
-
-content/
