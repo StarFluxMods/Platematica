@@ -1,10 +1,11 @@
 using KitchenData;
+using KitchenMods;
 using Unity.Collections;
 using Unity.Entities;
 
 namespace Platematica.Components
 {
-    public struct CHologramSpawner : IApplianceProperty, IAttachableProperty, IComponentData
+    public struct CHologramSpawner : IApplianceProperty, IModComponent, IAttachableProperty, IComponentData
     {
         public int playerID;
         public FixedString128 fileName;

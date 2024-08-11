@@ -14,7 +14,7 @@ using Application = UnityEngine.Application;
 
 namespace Platematica.Menus
 {
-    public class HologramLoader : KLMenu<PauseMenuAction>
+    public class HologramLoader : KLMenu<MenuAction>
     {
         public HologramLoader(Transform container, ModuleList module_list) : base(container, module_list)
         {

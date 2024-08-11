@@ -29,6 +29,7 @@ namespace Platematica.Menus
             {
                 HologramProjectorView.UpdateGhosts = true;
                 Mod.manager.GetPreference<PreferenceBool>("directionalAssistance").Set(result);
+                Mod.manager.Save();
             };
             
             New<SpacerElement>(true);
@@ -38,6 +39,7 @@ namespace Platematica.Menus
             importExportSettings.OnChanged += delegate (object _, int result)
             {
                 Mod.manager.GetPreference<PreferenceInt>("importExportSettings").Set(result);
+                Mod.manager.Save();
             };
             
             New<SpacerElement>(true);
@@ -48,6 +50,7 @@ namespace Platematica.Menus
             {
                 HologramProjectorView.UpdateGhosts = true;
                 Mod.manager.GetPreference<PreferenceFloat>("ghostOpacity").Set(result);
+                Mod.manager.Save();
             };
             
             New<SpacerElement>(true);
@@ -58,6 +61,7 @@ namespace Platematica.Menus
             {
                 HologramProjectorView.UpdateGhosts = true;
                 Mod.manager.GetPreference<PreferenceFloat>("redTint").Set(result);
+                Mod.manager.Save();
             };
             
             New<SpacerElement>(true);
@@ -68,6 +72,7 @@ namespace Platematica.Menus
             {
                 HologramProjectorView.UpdateGhosts = true;
                 Mod.manager.GetPreference<PreferenceFloat>("greenTint").Set(result);
+                Mod.manager.Save();
             };
             
             New<SpacerElement>(true);
@@ -78,6 +83,7 @@ namespace Platematica.Menus
             {
                 HologramProjectorView.UpdateGhosts = true;
                 Mod.manager.GetPreference<PreferenceFloat>("blueTint").Set(result);
+                Mod.manager.Save();
             };
             
             New<SpacerElement>(true);

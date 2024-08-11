@@ -7,7 +7,7 @@ using Platematica.Systems;
 
 namespace Platematica.Menus
 {
-    public class HologramBuilder : KLMenu<PauseMenuAction>
+    public class HologramBuilder : KLMenu<MenuAction>
     {
         public HologramBuilder(Transform container, ModuleList module_list) : base(container, module_list)
         {

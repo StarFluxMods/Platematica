@@ -35,8 +35,6 @@
 	</ItemGroup>
   
 	<ItemGroup>
-		<PackageReference Include="LZStringCSharp" Version="1.4.0" />
-		<PackageReference Include="Yariazen.PlateUp.ModBuildUtilities" Version="1.10.32" />
-		<IncludeDLL Include="$(OutputPath)LZStringCSharp.dll" />
+		<PackageReference Include="Yariazen.PlateUp.ModBuildUtilities" Version="1.11.5" />
 	</ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LZStringCSharp;
+using KitchenData;
 using Platematica.Systems;
 
 namespace Platematica.Utils
@@ -15,10 +15,150 @@ namespace Platematica.Utils
         
         public static string ConvertURLToReadable(string url)
         {
-            return LZString.DecompressFromBase64(url.Split('#')[1]);
+            return LZString.DecompressFromEncodedURIComponent(url.Split('#')[1]);
         }
 
         public static Schematic ConvertReadbleToSchematic(string readable, string name)
+        {
+            if (string.IsNullOrEmpty(readable))
+                return null;
+            
+            string[] args = readable.Split(' ');
+            
+            string version = args[0];
+            
+            if (version == "v2")
+                return ConvertV2ReadableToSchematic(readable, name);
+            if (version == "v3")
+                return ConvertV3ReadableToSchematic(readable, name);
+
+            return null;
+        }
+
+        private static Schematic ConvertV3ReadableToSchematic(string readable, string name)
+        {
+            if (string.IsNullOrEmpty(readable))
+                return null;
+            
+            
+            string[] args = readable.Split(' ');
+            
+            string version = args[0];
+            string size = args[1];
+            int xSize = int.Parse(size.Split('x')[1]);
+            int zSize = int.Parse(size.Split('x')[0]);
+            string data = args[2];
+            
+            if (version != "v3")
+                return null;
+            
+            Schematic schematic = new Schematic();
+            
+            schematic.xSize = xSize;
+            schematic.zSize = zSize;
+            schematic.name = name;
+
+            Debug.LogWarning("xSize " + schematic.xSize); 
+            Debug.LogWarning("zSize " + schematic.zSize); 
+            Debug.LogWarning("name " + schematic.name); 
+
+            string[] tiles = data.Split('|');
+            
+            tiles = tiles.Take(tiles.Count() - 1).ToArray();
+            
+            string[,] grid = new string[xSize, zSize];
+            int x = 0;
+            int z = 0;
+            foreach (string tile in tiles)
+            {
+                Debug.LogWarning($"Tile {x},{z}");
+                grid[x, z] = tile;
+                x++;
+                if (x >= xSize)
+                {
+                    x = 0;
+                    z++;
+                }
+            }
+            for (int i = 0; i < zSize; i++)
+            {
+                for (int j = 0; j < xSize; j++)
+                {
+                    string[] encodedData = grid[j, i].Split(',');
+                    
+                    string applianceDetails = encodedData[0];
+                    string[] appliance = applianceDetails.Split('-');
+                    string applianceID = "";
+                    string applianceAppended = "";
+                    if (appliance.Length == 1)
+                    {
+                        applianceID = appliance[0];
+                    }
+                    if (appliance.Length == 2)
+                    {
+                        applianceID = "-" + appliance[1];
+                    }
+                    if (appliance.Length == 3)
+                    {
+                        applianceID = "-" + appliance[1];
+                        applianceAppended = appliance[2];
+                    }
+                    string applianceRotation = encodedData[1];
+                    
+                    int rotationOffset = 0;
+                    int grabberDirection = 0;
+                    bool isDirectional = false;
+
+                    if (!GameData.Main.TryGet(int.Parse(applianceID), out Appliance app)) continue;
+
+                    switch (applianceRotation) // Setup rotation offset
+                    {
+                        case "u":
+                            rotationOffset = 0;
+                            break;
+                        case "r":
+                            rotationOffset = 90;
+                            break;
+                        case "d":
+                            rotationOffset = 180;
+                            break;
+                        case "l":
+                            rotationOffset = 270;
+                            break;
+                    }
+
+                    switch (applianceAppended) // Fix rotation for Corner Grabbers & Assign Grabber Direction
+                    {
+                        case "-Left":
+                            grabberDirection = 4;
+                            break;
+                        case "-Right":
+                            grabberDirection = 1;
+                            break;
+                    }
+                    
+                    if (CreateHologram.DirectionalIDs.Contains(int.Parse(applianceID))) // Check if appliance is directional
+                    {
+                        isDirectional = true;
+                    }
+
+                    
+                    schematic.components.Add(new SchematicComponent // Add component to schematic
+                    {
+                        xOffset = j,
+                        zOffset = -i,
+                        applianceID = int.Parse(applianceID),
+                        rotationOffset = rotationOffset,
+                        rotatedGrabberDirection = grabberDirection,
+                        isDirectional = isDirectional
+                    });
+                }
+            }
+            
+            return schematic;
+        }
+
+        private static Schematic ConvertV2ReadableToSchematic(string readable, string name)
         {
             if (string.IsNullOrEmpty(readable))
                 return null;
@@ -120,7 +260,7 @@ namespace Platematica.Utils
 
             return schematic;
         }
-        
+
         public static Dictionary<string, int> applianceMap = new Dictionary<string, int>  {
                     { "60", 505496455 },
                     { "eY", -1357906425 },

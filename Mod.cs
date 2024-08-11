@@ -7,10 +7,10 @@ using KitchenMods;
 using System.Reflection;
 using Kitchen;
 using KitchenLib.Preferences;
-using Platematica.Customs;
-using Platematica.Menus;
 using MessagePack;
+using Platematica.Customs;
 using Platematica.Enums;
+using Platematica.Menus;
 using Platematica.Menus.IMGUI;
 using UnityEngine;
 
@@ -19,22 +19,16 @@ namespace Platematica
     public class Mod : BaseMod, IModSystem
     {
         public const string MOD_GUID = "com.starfluxgames.platematica";
-        public const string MOD_NAME = "Platematica (Beta)";
-        public const string MOD_VERSION = "0.1.5";
+        public const string MOD_NAME = "Platematica";
+        public const string MOD_VERSION = "0.1.6";
         public const string MOD_AUTHOR = "StarFluxGames";
-        public const string MOD_GAMEVERSION = ">=1.1.7";
+        public const string MOD_GAMEVERSION = ">=1.2.0";
 
         public static HologramProjector HologramProjector;
         public static Placeholder Placeholder;
         public static PreferenceManager manager;
 
         public static bool FileExplorerInstalled = false;
-        
-#if DEBUG
-        public const bool DEBUG_MODE = true;
-#else
-        public const bool DEBUG_MODE = false;
-#endif
 
         public static AssetBundle Bundle;
 
@@ -69,6 +63,7 @@ namespace Platematica
         
         protected override void OnPostActivate(KitchenMods.Mod mod)
         {
+            
             Bundle = mod.GetPacks<AssetBundleModPack>().SelectMany(e => e.AssetBundles).First();
             AddGameData();
             
@@ -84,14 +79,16 @@ namespace Platematica
             
             manager.Load();
             
-            ModsPreferencesMenu<PauseMenuAction>.RegisterMenu("Platematica", typeof(HologramMenu<PauseMenuAction>), typeof(PauseMenuAction));
+            ModsPreferencesMenu<MenuAction>.RegisterMenu("Platematica", typeof(HologramMenu<MenuAction>), typeof(MenuAction));
 
-            Events.PreferenceMenu_PauseMenu_CreateSubmenusEvent += (s, args) => {
-                args.Menus.Add(typeof(HologramMenu<PauseMenuAction>), new HologramMenu<PauseMenuAction>(args.Container, args.Module_list));
-                args.Menus.Add(typeof(HologramPreferences<PauseMenuAction>), new HologramPreferences<PauseMenuAction>(args.Container, args.Module_list));
-                args.Menus.Add(typeof(HologramLoader), new HologramLoader(args.Container, args.Module_list));
-                args.Menus.Add(typeof(HologramBuilder), new HologramBuilder(args.Container, args.Module_list));
-            };;
+            Events.PlayerPauseView_SetupMenusEvent += (s, args) =>
+            {
+                args.addMenu.Invoke(args.instance, new object[] { typeof(HologramMenu<MenuAction>), new HologramMenu<MenuAction>(args.instance.ButtonContainer, args.module_list) });
+                args.addMenu.Invoke(args.instance, new object[] { typeof(HologramPreferences<MenuAction>), new HologramPreferences<MenuAction>(args.instance.ButtonContainer, args.module_list) });
+                args.addMenu.Invoke(args.instance, new object[] { typeof(HologramLoader), new HologramLoader(args.instance.ButtonContainer, args.module_list) });
+                args.addMenu.Invoke(args.instance, new object[] { typeof(HologramBuilder), new HologramBuilder(args.instance.ButtonContainer, args.module_list) });
+            };
+            
         }
         #region Logging
         public static void LogInfo(string _log) { Debug.Log($"[{MOD_NAME}] " + _log); }
